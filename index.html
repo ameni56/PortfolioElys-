@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysé-Développeur web</title>
+    <meta name="description" content="Portfolio d'Elysé,développeur web">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg portfolio-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand-logo" href="#top">
+                Elysé<i>.</i>dev
+            </a>
+            <button class="navbar-toggler burger" id="burger" 
+            type="button" data-bs-toggle="collapse"
+            data-bs-target="#links"
+            aria-controls="links"
+            aria-expanded="false"
+            aria-label="Ouvrir le menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse links" id="links">
+            <div class="navbar-nav ms-auto align-items-lg-center">
+                <a class="nav-link" href="#about">A propos</a>
+                <a class="nav-link" href="#skills">Compétences</a>
+                <a class="nav-link" href="#projects">Projets</a>
+                <a class="nav-link" href="#contact">Contact</a>
+                <a class="btn p nav-contact" href="#contact">Me contacter</a>
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    <!--Contenu de la page-->
+    <main id="top">
+        <section class="hero">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <div class="name">Jaona Elysé RAKOTOMAMPIANDRA</div>
+                    <h1>Développeur web
+                    <span>HTML &amp; CSS &amp; JavaScript &amp; React &amp; Node.js</span>
+                </h1>
+                <p>
+                    Je conçois et développe des interface web modernes,
+                    responsives et accessibles,de l'integration frontend
+                    jusqu'au backend.
+                </p>
+                <div class="cta">
+                    <a class="btn p" href="#projects">
+                        Découvrir mes projets
+                    </a>
+                    <a class="btn p" href="#contact">
+                       Me contacter
+                    </a>
+                </div>
+                </div>
+            <div class="col-lg-5">
+                <div class="art" aria-hidden="true">
+                    <div class="c1"></div>
+                    <div class="c2"></div>
+                    <pre>const dev={ 
+    prénom:"Elysé",
+    stack:["HTML","CSS","JavaScript","React","Node.js"],
+    accessible:true
+};</pre>
+                    </pre>
+                </div>
+            </div>
+
+            </div>
+        </section>
+        <section id="about">
+            <div class="wrap about">
+                <div class="photo">Photo ou illustration</div>
+                <div>
+                    <div class="eyebrow">A propos</div>
+                    <h2>Qui suis-je ?</h2>
+                    <p>
+                        Développeur web formée via OpenClassrooms,
+                        j'aime transformer des idées en expériences numériques
+                        utiles et soignées.
+                    </p>
+                    <p>
+                        Objectif : rejoindre une équipe ou je peux contribuer
+                        au frontend comme au backend et continuer à progresser.
+                    </p>
+                    <a class="btn s cv" href="assets/cv/cv_elysé.pdf" download>Télécharger
+                        mon CV
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section id="skills">
+            <div class="wrap">
+                <div class="eyebrow">Compétences</div>
+                <h2>Ma boîte à outils</h2>
+                <p class="lead">
+                    Des technologies que j'ai réellement utilisées
+                    sur mes projets.
+                </p>
+                <div class="grid4" id="skills-grid"></div>
+            </div>
+        </section>
+        <section id="projects">
+            <div class="wrap">
+                <div class="eyebrow">Projets</div>
+                <h2>Mes réalisations</h2>
+                <p class="lead">
+                    Cinq projets OpenClassrooms,du site statique à l'API sécurisée.
+                    Ouvre une fiche pour le détail.
+                </p>
+                <div class="grid3" id="projects-grid"></div>
+            </div>
+        </section>
+        <section id="contact">
+            <div class="eyebrow">Contact</div>
+            <h2>Un projet en tête ? Parlons-en</h2>
+            <p class="lead">
+                Ecris-moi, je réponds rapidement.
+            </p>
+            <form id="contact-form" novalidate>
+                <div>
+                    <label for="n">Nom</label>
+                    <input id="n" name="nom" placeholder="Votre nom"
+                    autocomplete="name"
+                    required>
+                    <small class="err" id="n-err"></small>
+                </div>
+                <div>
+                    <label for="e">Email</label>
+                    <input id="e" name="email" type="email" 
+                    placeholder="vous@exemple.com"
+
+                    autocomplete="email" required>
+                    <small class="err" id="n-err"></small>
+                     </div>
+                    <div>
+                        <label for="m">Message</label>
+                        <textarea id="m" name="message" placeholder="Votre message"
+                        required></textarea>
+                         <small class="err" id="n-err"></small>
+                         </div>
+                         <button class="btn p" type="submit">Envoyer</button>
+                         <p class="form-msg" id="form-msg"
+                         role="status" aria-live="polite"></p>
+            </form>
+
+        </section>
+    </main>
+    <footer>
+        <div class="wrap">
+            <div>
+                <a href="https://github.com/Elyse234" id="link-github">Github</a>
+                <a href="https://www.linkedin.com/in/elysé-rakotomampiandra-4850471a1/" id="link-linkedin">Linkedin</a>
+            </div>
+            <div>
+                ©<span id="year">2026</span> Jaona Elysé RAKOTOMAMPIANDRA
+            </div>
+        </div>
+    </footer>
+    <dialog id="project-dialog" aria-labelledby="dialog-title">
+        <button class="dialog-close"
+        id="dialog-close" type="button" aria-label="Fermer la fiche">
+    x</button>
+    <div id="dialog-body"></div>
+    </dialog>
+     <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
