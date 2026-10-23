@@ -12,16 +12,16 @@
 .portfolio-navbar .container{
     min-height: 80px;
 }
-.portfolio-navbar .navbar-brand-logo{
+.portfolio-navbar .logo{
     margin-right:0;
       color:var(--ink);
        font:700 22px "Space Grotesk",sans-serif;
        text-decoration:none;
 }
-.portfolio-navbar .navbar-brand-logo:hover{
+.portfolio-navbar .logo:hover{
     color:var(--ink)
 }
-.portfolio-navbar .navbar-brand-logo i{
+.portfolio-navbar .logo i{
     color:var(--accent);
     font-style:normal
 }
@@ -50,6 +50,24 @@
 }
 .portfolio-navbar .navbar-toggler:focus{
     box-shadow: 0 0 0 3px rgb(124 58 237/20%);
+}
+.portfolio-navbar .navbar-toggler-icon {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 18px;
+  background-image: none;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.portfolio-navbar .navbar-toggler-icon::after {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  border-top: 2px solid var(--ink);
+  content: "";
 }
 .hero .container{
     position: relative;
@@ -107,7 +125,7 @@ font-weight: 600;
 }
 .about{
     display:grid;
-    grid-template: .8fr 1.2fr;
+    grid-template-columns: .8fr 1.2fr;
     align-items:center;
     gap:56px;
 }
@@ -134,6 +152,7 @@ footer{
     padding:32px 0;
     color:var(--bg);
     background:#111827 ;
+    color: #F9FAFB;
     font-size:14px;
 }
 footer .wrap{
