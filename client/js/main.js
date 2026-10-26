@@ -1,122 +1,151 @@
 
+/* =====================================================
+   POINT D'ENTRÉE DU PORTFOLIO
+   Affichage, fiches projets, navigation et formulaire
+   ===================================================== */
+
+import { SKILLS, PROJECTS, SOCIAL } from "./data.js";
+
 (function () {
   "use strict";
 
-  function el(tag, props, children) {
+  /* ---------- Création d'éléments HTML ---------- */
+
+  function el(tag, props = {}, children = []) {
     const node = document.createElement(tag);
 
-    Object.entries(props || {}).forEach(([k, v]) => {
-      if (k === "class") node.className = v;
-      else if (k === "text") node.textContent = v;
-      else node.setAttribute(k, v);
+    Object.entries(props).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
+
+      if (key === "class") {
+        node.className = value;
+      } else if (key === "text") {
+        node.textContent = value;
+      } else {
+        node.setAttribute(key, String(value));
+      }
     });
 
-    (children || []).forEach(c => {
-      if (c) node.appendChild(c);
+    children.forEach(child => {
+      if (child) node.appendChild(child);
     });
 
     return node;
   }
 
-  const tagEl = (label, dark) =>
-    el("span", {
+  // Crée une étiquette pour une compétence ou une technologie.
+  function tagEl(label, dark = false) {
+    return el("span", {
       class: "tag" + (dark ? " d" : ""),
       text: label
     });
+  }
 
-  const techEl = t =>
-    el("span", { class: "tag tech" }, [
-      t.logo
+  // Crée une étiquette technologique avec son icône éventuelle.
+  function techEl(tech) {
+    return el("span", { class: "tag tech" }, [
+      tech.logo
         ? el("img", {
-            src: "assets/icons/" + t.logo + ".svg",
+            src: "assets/icons/" + tech.logo + ".svg",
             alt: "",
             width: "16",
             height: "16"
           })
         : null,
-      document.createTextNode(t.nom)
+      document.createTextNode(tech.nom)
     ]);
+  }
 
-  /* ---------- Rendu des compétences ---------- */
+  /* ---------- Affichage des compétences ---------- */
 
   function renderSkills() {
     const grid = document.getElementById("skills-grid");
 
-    if (!grid || typeof SKILLS === "undefined") {
-      console.error("Données des compétences introuvables.");
+    if (!grid) {
+      console.error("Élément #skills-grid introuvable.");
       return;
     }
 
     grid.replaceChildren();
 
-    SKILLS.forEach(s => {
-      grid.appendChild(
-        el("div", { class: "card" }, [
-          el("h3", { text: s.titre }),
-          ...s.tags.map(t => tagEl(t, s.dark))
-        ])
-      );
+    SKILLS.forEach(skill => {
+      const card = el("div", { class: "card" }, [
+        el("h3", { text: skill.titre }),
+        ...skill.tags.map(tag => tagEl(tag, skill.dark))
+      ]);
+
+      grid.appendChild(card);
     });
   }
 
+  /* ---------- Affichage des projets ---------- */
 
   function renderProjects() {
     const grid = document.getElementById("projects-grid");
 
-    if (!grid || typeof PROJECTS === "undefined") {
-      console.error("Données des projets introuvables.");
+    if (!grid) {
+      console.error("Élément #projects-grid introuvable.");
       return;
     }
 
     grid.replaceChildren();
 
-    PROJECTS.forEach(p => {
+    PROJECTS.forEach(project => {
       const shot = el("div", {
-        class: "shot" + (p.sombre ? " k" : "")
+        class: "shot" + (project.sombre ? " k" : "")
       });
 
-      if (p.image) {
+      if (project.image) {
         shot.appendChild(
           el("img", {
-            src: p.image,
-            alt: p.legende,
+            src: project.image,
+            alt: project.legende || project.titre,
             loading: "lazy"
           })
         );
       } else {
-        shot.textContent = p.legende;
+        shot.textContent = project.legende || project.titre;
       }
 
       const links = el("div", { class: "pl" });
 
-      if (p.fiche !== false) {
-        const btn = el("button", {
-          class: "linkbtn",
-          type: "button",
-          text: "Voir la fiche"
-        });
+      // Bouton d'ouverture de la fiche détaillée.
+      if (project.fiche !== false) {
+        
+const button = el("button", {
+  class: "linkbtn",
+  type: "button",
+  text: "Voir la fiche"
+});
 
-        btn.addEventListener("click", () => openProject(p));
-        links.appendChild(btn);
+// Précise le nom du projet pour les technologies d'assistance.
+button.setAttribute(
+  "aria-label",
+  `Voir la fiche du projet ${project.titre}`
+);
+
+button.addEventListener("click", () => openProject(project));
+links.appendChild(button);
       }
 
-      if (p.liens.github) {
+      // Certains projets, comme Menu Maker, n'ont pas de lien GitHub.
+      if (project.liens?.github) {
         links.appendChild(
           el("a", {
-            href: p.liens.github,
+            href: project.liens.github,
             target: "_blank",
-            rel: "noopener",
+            rel: "noopener noreferrer",
             text: "GitHub"
           })
         );
       }
 
-      if (p.liens.demo) {
+      if (project.liens?.demo) {
         links.appendChild(
           el("a", {
-            href: p.liens.demo,
+            href: project.liens.demo,
             target: "_blank",
-            rel: "noopener",
+            rel: "noopener noreferrer",
             text: "Démo"
           })
         );
@@ -126,10 +155,10 @@
         el("article", { class: "card proj" }, [
           shot,
           el("div", { class: "pb" }, [
-            el("h3", { text: p.titre }),
-            el("p", { text: p.description }),
-            el("div", { class: "res", text: p.resultat }),
-            el("div", {}, p.tags.map(t => tagEl(t))),
+            el("h3", { text: project.titre }),
+            el("p", { text: project.description }),
+            el("div", { class: "res", text: project.resultat }),
+            el("div", {}, project.tags.map(tag => tagEl(tag))),
             links
           ])
         ])
@@ -137,164 +166,187 @@
     });
   }
 
-  /* ---------- Fiche détaillée d'un projet ---------- */
+  /* ---------- Fiches détaillées des projets ---------- */
 
   const dialog = document.getElementById("project-dialog");
   const dialogBody = document.getElementById("dialog-body");
+
   let lastTrigger = null;
 
-  const section = (titre, ...contenu) =>
-    el("section", { class: "fiche-sec" }, [
+  function section(titre, ...contenu) {
+    return el("section", { class: "fiche-sec" }, [
       el("h4", { text: titre }),
       ...contenu.filter(Boolean)
     ]);
+  }
 
-  function openProject(p) {
-    if (!dialog || !dialogBody) return;
+  function openProject(project) {
+    if (!dialog || !dialogBody) {
+      console.error("La fenêtre de fiche projet est introuvable.");
+      return;
+    }
 
     lastTrigger = document.activeElement;
     dialogBody.replaceChildren();
 
     dialogBody.appendChild(
-      el("div", { class: "eyebrow", text: "Fiche projet" })
+      el("div", {
+        class: "eyebrow",
+        text: "Fiche projet"
+      })
     );
 
     dialogBody.appendChild(
-      el("h3", { id: "dialog-title", text: p.titre })
+      el("h3", {
+        id: "dialog-title",
+        text: project.titre
+      })
     );
 
     dialogBody.appendChild(
-      el("p", { class: "fiche-sub", text: p.sousTitre || "" })
+      el("p", {
+        class: "fiche-sub",
+        text: project.sousTitre || ""
+      })
     );
 
-    if (p.contexte) {
+    if (project.contexte) {
       dialogBody.appendChild(
-        section("Contexte", el("p", { text: p.contexte }))
+        section(
+          "Contexte",
+          el("p", { text: project.contexte })
+        )
       );
     }
 
-    if (p.objectifs) {
+    if (project.objectifs) {
       dialogBody.appendChild(
-        section("Objectifs", el("p", { text: p.objectifs }))
+        section(
+          "Objectifs",
+          el("p", { text: project.objectifs })
+        )
       );
     }
 
-    if (p.technologies && p.technologies.length) {
+    if (project.technologies?.length) {
       dialogBody.appendChild(
         section(
           "Technologies utilisées",
           el("div", {
             class: "tech-row"
-          }, p.technologies.map(techEl)),
-          p.technoTexte
-            ? el("p", { text: p.technoTexte })
+          }, project.technologies.map(techEl)),
+          project.technoTexte
+            ? el("p", { text: project.technoTexte })
             : null
         )
       );
     }
 
-    if (p.competences) {
+    if (project.competences) {
       dialogBody.appendChild(
         section(
           "Compétences développées",
-          el("p", { text: p.competences })
+          el("p", { text: project.competences })
         )
       );
     }
 
-    if (p.resultats) {
-      const bloc = [
-        el("p", { text: p.resultats })
+    if (project.resultats) {
+      const content = [
+        el("p", { text: project.resultats })
       ];
 
-      if (p.scores) {
-        bloc.push(
-          el("div", { class: "scores" },
-            p.scores.map(s =>
-              el("div", { class: "score" }, [
-                el("b", { text: String(s.valeur) }),
-                el("span", { text: s.label })
-              ])
-            )
-          )
+      if (project.scores?.length) {
+        content.push(
+          el("div", {
+            class: "scores"
+          }, project.scores.map(score =>
+            el("div", { class: "score" }, [
+              el("b", { text: String(score.valeur) }),
+              el("span", { text: score.label })
+            ])
+          ))
         );
 
-        bloc.push(
+        content.push(
           el("p", {
             class: "note",
-            text: "Audit Lighthouse final"
+            text: "Scores Lighthouse de l'audit final"
           })
         );
       }
 
       dialogBody.appendChild(
-        section("Résultats et impact", ...bloc)
+        section("Résultats et impact", ...content)
       );
     }
 
-    if (p.perspectives) {
+    if (project.perspectives) {
       dialogBody.appendChild(
         section(
           "Perspectives d'amélioration",
-          el("p", { text: p.perspectives })
+          el("p", { text: project.perspectives })
         )
       );
     }
 
-    const caps = p.captures && p.captures.length
-      ? el(
-          "div",
-          { class: "caps" },
-          p.captures.map(src =>
-            el("img", {
-              src,
-              alt: "Capture du projet " + p.titre,
-              loading: "lazy"
-            })
-          )
-        )
+    // Affiche les captures si elles existent.
+    const captures = project.captures?.length
+      ? el("div", {
+          class: "caps"
+        }, project.captures.map(src =>
+          el("img", {
+            src,
+            alt: "Capture du projet " + project.titre,
+            loading: "lazy"
+          })
+        ))
       : el("p", {
           class: "note",
           text: "Captures d'écran à venir."
         });
 
     dialogBody.appendChild(
-      section("Captures d'écran", caps)
+      section("Captures d'écran", captures)
     );
 
-    const liens = el("div", { class: "cta" });
+    // Les liens sont facultatifs.
+    const links = el("div", { class: "cta" });
 
-    if (p.liens.github) {
-      liens.appendChild(
+    if (project.liens?.github) {
+      links.appendChild(
         el("a", {
           class: "btn p",
-          href: p.liens.github,
+          href: project.liens.github,
           target: "_blank",
-          rel: "noopener",
+          rel: "noopener noreferrer",
           text: "Voir le dépôt GitHub"
         })
       );
     }
 
-    if (p.liens.demo) {
-      liens.appendChild(
+    if (project.liens?.demo) {
+      links.appendChild(
         el("a", {
           class: "btn s",
-          href: p.liens.demo,
+          href: project.liens.demo,
           target: "_blank",
-          rel: "noopener",
+          rel: "noopener noreferrer",
           text: "Voir le projet"
         })
       );
     }
 
-    if (liens.children.length) {
+    if (links.children.length) {
       dialogBody.appendChild(
-        section("Liens et ressources", liens)
+        section("Liens et ressources", links)
       );
     }
 
-    dialog.showModal();
+    if (!dialog.open) {
+      dialog.showModal();
+    }
+
     dialog.scrollTop = 0;
   }
 
@@ -307,8 +359,8 @@
       closeButton.addEventListener("click", () => dialog.close());
     }
 
-    dialog.addEventListener("click", e => {
-      if (e.target === dialog) dialog.close();
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
     });
 
     dialog.addEventListener("close", () => {
@@ -318,7 +370,7 @@
     });
   }
 
- 
+  /* ---------- Menu de navigation mobile ---------- */
 
   function initMenu() {
     const burger = document.getElementById("burger");
@@ -335,15 +387,16 @@
       setOpen(!links.classList.contains("open"));
     });
 
-    links.addEventListener("click", e => {
-      if (e.target.closest("a")) setOpen(false);
+    links.addEventListener("click", event => {
+      if (event.target.closest("a")) setOpen(false);
     });
 
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") setOpen(false);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") setOpen(false);
     });
   }
 
+  /* ---------- Mise en évidence du lien actif ---------- */
 
   function initActiveLink() {
     const navLinks = document.querySelectorAll(
@@ -353,17 +406,19 @@
     if (!("IntersectionObserver" in window)) return;
 
     const sections = [...navLinks]
-      .map(a => document.querySelector(a.getAttribute("href")))
+      .map(link => document.querySelector(link.getAttribute("href")))
       .filter(Boolean);
 
-    const obs = new IntersectionObserver(entries => {
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
 
-        navLinks.forEach(a => {
-          a.classList.toggle(
+        navLinks.forEach(link => {
+          link.classList.toggle(
             "on",
-            a.getAttribute("href") === "#" + entry.target.id
+            link.getAttribute("href") === "#" + entry.target.id
           );
         });
       });
@@ -371,10 +426,10 @@
       rootMargin: "-45% 0px -50% 0px"
     });
 
-    sections.forEach(s => obs.observe(s));
+    sections.forEach(section => observer.observe(section));
   }
 
-  
+  /* ---------- Formulaire de contact ---------- */
 
   function initForm() {
     const form = document.getElementById("contact-form");
@@ -393,47 +448,40 @@
       {
         id: "n",
         err: "Merci d'indiquer ton nom.",
-        ok: v => v.trim().length >= 2
+        ok: value => value.trim().length >= 2
       },
       {
         id: "e",
         err: "Email invalide.",
-        ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+        ok: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
       },
       {
         id: "m",
         err: "Ton message doit contenir au moins 10 caractères.",
-        ok: v => v.trim().length >= 10
+        ok: value => value.trim().length >= 10
       }
     ];
 
-    console.log("Gestionnaire du formulaire initialisé.");
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
 
-  
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      console.log("Soumission interceptée par JavaScript.");
-
-      
       let valid = true;
 
-      fields.forEach(f => {
-        const input = document.getElementById(f.id);
-        const errorElement = document.getElementById(f.id + "-err");
+      fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        const errorElement = document.getElementById(field.id + "-err");
 
         if (!input) {
           valid = false;
           return;
         }
 
-        const good = f.ok(input.value);
+        const good = field.ok(input.value);
 
         input.setAttribute("aria-invalid", String(!good));
 
         if (errorElement) {
-          errorElement.textContent = good ? "" : f.err;
+          errorElement.textContent = good ? "" : field.err;
         }
 
         if (!good) valid = false;
@@ -444,7 +492,7 @@
         return;
       }
 
-      if (submitButton && submitButton.disabled) return;
+      if (submitButton?.disabled) return;
 
       const nom = document.getElementById("n").value.trim();
       const email = document.getElementById("e").value.trim();
@@ -457,9 +505,14 @@
 
       msg.textContent = "Envoi de ton message...";
       msg.setAttribute("role", "status");
+      msg.setAttribute("aria-live", "polite");
 
       try {
-      
+        /*
+         * En local, le backend doit fonctionner sur le port 3000.
+         * Pour GitHub Pages, remplace cette adresse par l'URL
+         * publique de ton backend Node.js hébergé.
+         */
         const response = await fetch(
           "http://localhost:3000/api/contact",
           {
@@ -467,11 +520,7 @@
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              nom,
-              email,
-              message
-            })
+            body: JSON.stringify({ nom, email, message })
           }
         );
 
@@ -488,24 +537,19 @@
 
         form.reset();
 
-        fields.forEach(f => {
-          const input = document.getElementById(f.id);
-          const errorElement = document.getElementById(f.id + "-err");
+        fields.forEach(field => {
+          const input = document.getElementById(field.id);
+          const errorElement = document.getElementById(field.id + "-err");
 
           if (input) input.setAttribute("aria-invalid", "false");
           if (errorElement) errorElement.textContent = "";
         });
 
       } catch (error) {
-        console.error("Erreur lors de l'envoi du formulaire :", error);
+        console.error("Erreur lors de l'envoi :", error);
 
-        if (error instanceof TypeError) {
-          msg.textContent =
-            "Impossible de contacter le serveur. Vérifie que le backend Node.js est démarré.";
-        } else {
-          msg.textContent =
-            error.message || "Une erreur est survenue. Réessaie plus tard.";
-        }
+        msg.textContent =
+          "Impossible d'envoyer le message. Vérifie que le serveur est démarré et que l'adresse de l'API est correcte.";
 
       } finally {
         if (submitButton) {
@@ -516,22 +560,23 @@
     });
   }
 
- 
+  /* ---------- Initialisation générale ---------- */
 
+  // Affiche automatiquement l'année actuelle dans le pied de page.
   const year = document.getElementById("year");
 
   if (year) {
     year.textContent = new Date().getFullYear();
   }
 
-  if (typeof SOCIAL !== "undefined") {
-    const github = document.getElementById("link-github");
-    const linkedin = document.getElementById("link-linkedin");
+  // Configure les liens vers les réseaux sociaux.
+  const github = document.getElementById("link-github");
+  const linkedin = document.getElementById("link-linkedin");
 
-    if (github) github.href = SOCIAL.github;
-    if (linkedin) linkedin.href = SOCIAL.linkedin;
-  }
+  if (github) github.href = SOCIAL.github;
+  if (linkedin) linkedin.href = SOCIAL.linkedin;
 
+  // Initialise toutes les fonctionnalités du portfolio.
   renderSkills();
   renderProjects();
   initDialog();
