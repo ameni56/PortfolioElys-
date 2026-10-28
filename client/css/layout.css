@@ -165,14 +165,13 @@
 }
 
 .photo {
-  display: flex;
-  align-items: flex-end;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
   aspect-ratio: 4 / 5;
-  padding: 10px;
+  object-fit: cover;
   border-radius: 28px;
-  background: linear-gradient(135deg, #7C3AED, #111827);
-  color: #FFFFFF;
-  font-size: 14px;
 }
 
 /* Pied de page */
