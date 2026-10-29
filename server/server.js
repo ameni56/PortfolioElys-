@@ -1,5 +1,5 @@
 const express=require("express");
-const nodemailer=require("nodemailer");
+
 const dotenv=require("dotenv");
 
 const path=require("path");
