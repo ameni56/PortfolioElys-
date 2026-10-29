@@ -70,14 +70,14 @@ app.post("/api/contact",async(req,res)=>{
         console.log("Validation réussie")
         console.log("Envoi via l'API HTTPS Resend")
         
-        const response=await fetch("https://api.resend.com/email",{
+        const response=await fetch("https://api.resend.com/emails",{
             method:"POST",
             headers:{
                 Authorization:`Bearer ${process.env.RESEND_API_KEY}`,
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-                form : "Portfolio Elysé <onboarding@resend.dev>",
+                from : "Portfolio Elysé <onboarding@resend.dev>",
                 to:[process.env.CONTACT_RECEIVER],
                 reply_to:cleanEmail,
                 subject:`Nouveau message du portfolio : ${cleanNom}`,
