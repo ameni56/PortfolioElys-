@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elysé-Développeur web</title>
-    <meta name="description" content="Portfolio d'Elysé,développeur web">
+    <title>Jaona Elysé RAKOTOMAMPIANDRA-Développeur web débutant</title>
+    <meta name="description" content="
+    Découvrez le portfolio de Jaona Elysé RAKOTOMAMPIANDRA, développeur web débutant : projets, compétences 
+    en HTML, CSS, JavaScript, React, Node.js.
+    ">
+    <meta name="robots" content="index,follow">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Jaona Elysé RAKOTOMAMPIANDRA | Développeur web débutant">
+    <meta property="og:decription" content="Découvrez mes projets web, mes compétences font-end
+    et full-stack et mon parcours de développeur web débutant.">
+    <meta name="author" content="Jaona Elysé RAKOTOMAMPIANDRA">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/variables.css">
@@ -33,9 +43,9 @@
         <div class="collapse navbar-collapse links" id="links">
             <div class="navbar-nav ms-auto align-items-lg-center">
                 <a class="nav-link" href="#about">A propos</a>
+                 <a class="nav-link" href="#approche">Mon parcours</a>
                 <a class="nav-link" href="#skills">Compétences</a>
                 <a class="nav-link" href="#projects">Projets</a>
-                <a class="nav-link" href="#contact">Contact</a>
                 <a class="btn p nav-contact" href="#contact">Me contacter</a>
             </div>
         </div>
@@ -49,13 +59,14 @@
             <div class="row align-items-center g-5">
                 <div class="col-lg-7">
                     <div class="name">Jaona Elysé RAKOTOMAMPIANDRA</div>
-                    <h1>Développeur web
-                    <span>HTML &amp; CSS &amp; JavaScript &amp; React &amp; Node.js</span>
+                    <h1>Développeur web débutant
+                    <span>Front-end &amp; Full-stack</span>
                 </h1>
                 <p>
                     Je conçois et développe des interface web modernes,
-                    responsives et accessibles,de l'integration frontend
-                    jusqu'au backend.
+                    responsives et accessibles, avec HTML, CSS, JavaScript
+                    et React, ainsi que des application côté serveur avec
+                    Node.js et Express.
                 </p>
                 <div class="cta">
                     <a class="btn p" href="#projects">
@@ -83,7 +94,7 @@
         </section>
         <section id="about">
             <div class="wrap about">
-                <img class="photo" img src="./assets/images/photo.png">
+                <img class="photo" img src="./assets/images/photo.png" alt="image de Jaona Elysé RAKOTOMAMPIANDRA ">
                 <div>
                     <div class="eyebrow">A propos</div>
                     <h2>Qui suis-je ?</h2>
@@ -297,6 +308,7 @@
                     <label for="n">Nom</label>
                     <input id="n" name="nom" placeholder="Votre nom"
                     autocomplete="name"
+                    aria-describedby="n-err"
                     required>
                     <small class="err" id="n-err"></small>
                 </div>
@@ -305,12 +317,13 @@
                     <input id="e" name="email" type="email" 
                     placeholder="vous@exemple.com"
 
-                    autocomplete="email" required>
+                    autocomplete="email" aria-describedby="n-err" required>
                     <small class="err" id="e-err"></small>
                      </div>
                     <div>
                         <label for="m">Message</label>
                         <textarea id="m" name="message" placeholder="Votre message"
+                        aria-describedby="n-err"
                         required></textarea>
                          <small class="err" id="m-err"></small>
                          </div>

@@ -72,6 +72,7 @@
   .cta .btn,
   #contact-form .btn {
     width: 100%;
+    margin-bottom:5px;
   }
 
   dialog {
@@ -91,6 +92,7 @@
 
   .cta .btn {
     width: 100%;
+    margin-bottom: 10px;
   }
 
   .art {

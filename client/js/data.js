@@ -204,7 +204,7 @@ const PROJECTS = [
     tags: ["Kanban", "Planification", "Veille"],
     legende: "Tableau Kanban",
     sombre: true,
-    image: "images/menu_maker.png",
+    image: "./assets/images/kanban2.png",
 
     contexte: "Dans le cadre de ma formation chez OpenClassrooms, j’ai travaillé sur la préparation d’un projet web pour Qwenta, autour de la solution Menu Maker. Le projet m’a permis d’aborder les étapes d’organisation et de planification nécessaires avant le développement d’une application.",
 
@@ -225,7 +225,7 @@ const PROJECTS = [
 
     perspectives: "La démarche pourrait être enrichie par des points de suivi réguliers, une mise à jour continue et une veille documentée et périodiquement actualisée. Un bilan final permettrait également de comparer la planification initiale avec l’avancement réel du projet.",
 
-    captures: []
+    captures: ["./assets/images/kanban3.png","./assets/images/technique1.png","./assets/images/technique2.png"]
 
     
   }

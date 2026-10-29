@@ -489,8 +489,13 @@ links.appendChild(button);
 
       if (!valid) {
         msg.textContent = "Merci de corriger les champs indiqués.";
+        const firstInvalid=fields.map(
+          field=>document.getElementById(field.id)
+        ).find(input=>input?.getAttribute("aria-invalid")==="true");
+          firstInvalid?.focus();
         return;
       }
+
 
       if (submitButton?.disabled) return;
 
